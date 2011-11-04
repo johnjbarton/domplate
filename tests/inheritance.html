@@ -1,0 +1,105 @@
+<html>
+<head>
+<style>
+.t1 {
+  margin-left: 1ex;
+}
+.t2 {
+  margin-left: 1ex;
+}
+.t3 {
+  margin-left: 1ex;
+}
+</style>
+<script  src="http://ajax.cdnjs.com/ajax/libs/require.js/0.24.0/require.min.js"></script>
+<script type="text/javascript">
+require(['../lib/domplate'], function(domplate) {
+
+var DIV = domplate.tags.DIV;
+var TAG = domplate.tags.TAG;
+
+with(domplate.tags) {
+
+var template1 = domplate.domplate(
+{
+    tag:
+        DIV({'class':'t1'}, "$object|getValue"),
+  
+    getValue: function(object) {
+        return "temp1";
+    }
+});
+
+var template2 = domplate.domplate(template1,
+{
+    tag: DIV({'class':'t2'},
+      SPAN('template2 tag'),
+      TAG(template1.tag, {object: '$object'})
+    ),
+    getValue: function(object) {
+        return "temp2";
+    }
+});
+
+var template3 = domplate.domplate(template2, 
+{
+    tag: DIV({'class':'t3'},
+      SPAN('template3 tag'),
+      TAG(template2.tag, {object: '$object'})
+    ),
+    getValue: function(object) {
+        return "temp3";
+    }
+});
+}
+function testRender() {
+  var elt = document.getElementById('testRenderLevel1');
+  template1.tag.replace({object: {}}, elt);
+  
+  elt = document.getElementById('testRenderLevel2');
+  template2.tag.replace({object: {}}, elt);
+  
+  elt = document.getElementById('testRenderLevel3');
+  template3.tag.replace({object: {}}, elt);
+  
+  // With self set on 3rd arg
+  
+  var elt = document.getElementById('testRenderLevel1Self');
+  template1.tag.replace({object: {}}, elt, template1);
+  
+  elt = document.getElementById('testRenderLevel2Self');
+  template2.tag.replace({object: {}}, elt, template2);
+  
+  elt = document.getElementById('testRenderLevel3Self');
+  template3.tag.replace({object: {}}, elt, template3);
+}
+
+window.testRender = testRender;
+
+});
+
+</script>
+</head>
+<body>
+<h1>Domplate Inheritance Test</h1>
+<button onclick='testRender()'>Test</button>
+<h2>Level 1, no inheritance</h2>
+<div id='testRenderLevel1'>
+</div>
+<h2>Level 2</h2>
+<div id='testRenderLevel2'>
+</div>
+<h2>Level 3</h2>
+<div id='testRenderLevel3'>
+</div>
+<h2>Self set, Level 1, no inheritance</h2>
+<div id='testRenderLevel1Self'>
+</div>
+<h2>Self set, Level 2</h2>
+<div id='testRenderLevel2Self'>
+</div>
+<h2>Self set, Level 3</h2>
+<div id='testRenderLevel3Self'>
+</div>
+</body>
+</html>
