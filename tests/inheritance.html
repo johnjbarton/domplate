@@ -15,9 +15,6 @@
 <script type="text/javascript">
 require(['../lib/domplate'], function(domplate) {
 
-var DIV = domplate.tags.DIV;
-var TAG = domplate.tags.TAG;
-
 with(domplate.tags) {
 
 var template1 = domplate.domplate(
@@ -26,52 +23,62 @@ var template1 = domplate.domplate(
         DIV({'class':'t1'}, "$object|getValue"),
   
     getValue: function(object) {
-        return "temp1";
-    }
+        return "temp1 "+object.value;
+    },
+    name: "t1",
 });
 
 var template2 = domplate.domplate(template1,
 {
     tag: DIV({'class':'t2'},
       SPAN('template2 tag'),
-      TAG(template1.tag, {object: '$object'})
+      TAG(template1.tag, {object: '$object'}),
+      DIV({'style':'border:solid green'},
+         template1.tag
+      )
     ),
     getValue: function(object) {
-        return "temp2";
-    }
+        return "temp2 "+object.value;
+    },
+    name: "t2",
 });
 
 var template3 = domplate.domplate(template2, 
 {
     tag: DIV({'class':'t3'},
       SPAN('template3 tag'),
-      TAG(template2.tag, {object: '$object'})
+      TAG(template2.tag, {object: '$object'}),
+      DIV({'style':'border:solid orange'},
+         template2.tag
+      )
     ),
     getValue: function(object) {
-        return "temp3";
-    }
+        return "temp3 "+object.value;
+    },
+    name: "t3",
 });
 }
 function testRender() {
   var elt = document.getElementById('testRenderLevel1');
-  template1.tag.replace({object: {}}, elt);
+  template1.tag.replace({object: {value: 'topArg'}}, elt);
   
   elt = document.getElementById('testRenderLevel2');
-  template2.tag.replace({object: {}}, elt);
+  template2.tag.replace({object: {value: 'topArg'}}, elt);
   
   elt = document.getElementById('testRenderLevel3');
-  template3.tag.replace({object: {}}, elt);
+  template3.tag.replace({object: {value: 'topArg'}}, elt);
   
   // With self set on 3rd arg
   
   var elt = document.getElementById('testRenderLevel1Self');
-  template1.tag.replace({object: {}}, elt, template1);
+  template1.tag.replace({object: {value: 'topArg'}}, elt, template1);
   
   elt = document.getElementById('testRenderLevel2Self');
-  template2.tag.replace({object: {}}, elt, template2);
+  template2.tag.replace({object: {value: 'topArg'}}, elt, template2);
   
   elt = document.getElementById('testRenderLevel3Self');
-  template3.tag.replace({object: {}}, elt, template3);
+  template3.tag.replace({object: {value: 'topArg'}}, elt, template3);
+  
 }
 
 window.testRender = testRender;
@@ -101,5 +108,6 @@ window.testRender = testRender;
 <h2>Self set, Level 3</h2>
 <div id='testRenderLevel3Self'>
 </div>
+
 </body>
 </html>
