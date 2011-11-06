@@ -60,7 +60,7 @@ var t2_TAGnTag = domplate.domplate(t1_TAGnTag,
 {
     tag: DIV({'class':'t2'},
       SPAN('t2_TAGnTag tag'),
-      TAG(t1_TAGnTag.tag, {object: '$object'})
+      TAG(t1_TAGnTag.tag, {object: {value: 'TAG2'})
     ),
     getValue: function(object) {
         return "temp2 "+object.value;
@@ -72,7 +72,7 @@ var t3_TAGnTag = domplate.domplate(t2_TAGnTag,
 {
     tag: DIV({'class':'t3'},
       SPAN('t3_TAGnTag tag'),
-      TAG(t2_TAGnTag.tag, {object: '$object'})
+      TAG(t2_TAGnTag.tag, {object: {value: 'TAG3'}})
     ),
     getValue: function(object) {
         return "temp3 "+object.value;
